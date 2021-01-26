@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class GameState {
 	int[,] grid = new int[13,13];
+	int score = 0;
 
 	public GameState() {
 		for(int x = 0; x < 13; x++) {
