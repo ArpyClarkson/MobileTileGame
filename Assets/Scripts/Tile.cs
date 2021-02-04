@@ -8,28 +8,28 @@ public class Tile {
     private Vector2 pos;
     private Vector2 size;
 
-    public Tile(int _posX, int _posY, int _color, int _sizeX, int _sizeY) {
+    public Tile( int _posX, int _posY, int _color, int _sizeX, int _sizeY ) {
         SetPos( _posX, _posY );
         SetColor( _color );
         SetSize( _sizeX, _sizeY );
     }
 
-    public Tile(Vector2 _pos, int _color, Vector2 _size) {
+    public Tile( Vector2 _pos, int _color, Vector2 _size ) {
         SetPos( _pos );
         SetColor( _color );
         SetSize( _size );
     }
 
-    public void SetPos(int _posX, int _posY) {
+    public void SetPos( int _posX, int _posY ) {
         pos.x = _posX;
         pos.y = _posY;
     }
 
-    public void SetPos(Vector2 _pos) {
+    public void SetPos( Vector2 _pos ) {
         pos = _pos;
     }
 
-    public void SetColor( int _color) {
+    public void SetColor( int _color ) {
         color = _color;
     }
 
