@@ -7,7 +7,7 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
 	IGrid grid;
 
     void Start() {
-        grid = new GameState();
+        grid = new GameState(9, 13);
 		//grid = new TileGrid(9, 13);
     }
 
