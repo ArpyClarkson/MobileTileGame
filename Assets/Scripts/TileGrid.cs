@@ -6,7 +6,7 @@ using UnityEngine;
  * Should TileGrid use an int array or an array of Tile objects?
  */
 
-public class TileGrid {
+public class TileGrid : IGrid {
     private int[,] grid;
 
     public TileGrid( int _gridSizeX, int _gridSizeY ) {
@@ -14,6 +14,10 @@ public class TileGrid {
 
         Initialize( grid );
     }
+
+	public void Generate() {
+
+	}
 
     // Initialize empty tilegrid
     public void Initialize( int[,] _grid ) {
@@ -36,4 +40,12 @@ public class TileGrid {
         // Index
         return true;
     }
+
+	public void Undo() {
+
+	}
+
+	public void Redo() {
+
+	}
 }

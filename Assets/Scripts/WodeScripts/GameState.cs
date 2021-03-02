@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 
 //Dan's implementation no touchy
-public class GameState {
-	public const int GridSizeX = 9;
-	public const int GridSizeY = 13;
+public class GameState : IGrid {
+	public int GridSizeX { private set; get; }
+	public int GridSizeY { private set; get; }
+	public int score { private set; get; }
 
-	int[,] grid = new int[GridSizeX, GridSizeY];
-	int score = 0;
+	int[,] grid;
 
-	public GameState() {
-		
+	public GameState(int GridSizeX, int GridSizeY) {
+		this.GridSizeX = GridSizeX;
+		this.GridSizeY = GridSizeY;
+
+		score = 0;
+		grid = new int[GridSizeX, GridSizeY];
+
 		for(int x = 0; x < GridSizeX; x++) {
 			for(int y = 0; y < GridSizeY; y++) {
 				grid[x, y] = 0;
@@ -23,12 +28,14 @@ public class GameState {
 
 	}
 
-	public void Select(int x, int y) {
+	public bool Pop(int x, int y) {
 		//Remove connected matching tiles
 		
 		//Collapse vertical
 
 		//Collapse horizontal
+
+		return false;
 	}
 
 	public void Undo() {
