@@ -7,14 +7,14 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
 	IGrid grid;
 
     void Start() {
-        grid = new GameState(9, 13);
-		//grid = new TileGrid(9, 13);
+        grid = new GameState();
+		//grid = new TileGrid();
     }
 
     void Update() {
 
 		if(Input.GetMouseButtonDown(0)) {
-			grid.Generate();
+			grid.Generate(9, 13);
 		}
         
     }
