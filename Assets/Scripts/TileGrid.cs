@@ -6,6 +6,6 @@ using UnityEngine;
  * Should TileGrid use an int array or an array of Tile objects?
  */
 
-public class TileGrid : IGrid {
+public class TileGrid : GameState {
     
 }
