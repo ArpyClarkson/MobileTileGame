@@ -27,7 +27,7 @@
             }
 
             fixed4 frag(v2f i) : SV_Target {
-                return float4(frac((i.uv-0.5f)*_SinTime.w*20.0f), 0, 0);
+                return float4(frac(i.uv*float2(9,13)), 0, 0);
             }
             ENDCG
         }

@@ -9,7 +9,7 @@ public class GameState : IGrid {
 
 	int[,] grid;
 
-	public GameState(int GridSizeX, int GridSizeY) {
+	public virtual void Generate(int GridSizeX, int GridSizeY) {
 		this.GridSizeX = GridSizeX;
 		this.GridSizeY = GridSizeY;
 
@@ -21,14 +21,9 @@ public class GameState : IGrid {
 				grid[x, y] = 0;
 			}
 		}
-
 	}
 
-	public void Generate() {
-
-	}
-
-	public bool Pop(int x, int y) {
+	public virtual bool Pop(int x, int y) {
 		//Remove connected matching tiles
 		
 		//Collapse vertical
@@ -38,11 +33,11 @@ public class GameState : IGrid {
 		return false;
 	}
 
-	public void Undo() {
+	public virtual void Undo() {
 
 	}
 
-	public void Redo() {
+	public virtual void Redo() {
 
 	}
 
