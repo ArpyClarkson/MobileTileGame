@@ -15,7 +15,7 @@ public class GridManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        tg = new TileGrid( GridSizeX, GridSizeY );
+       // tg = new TileGrid( GridSizeX, GridSizeY );
 
         
     }
