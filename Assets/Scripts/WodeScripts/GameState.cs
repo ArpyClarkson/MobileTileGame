@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 //Dan's implementation no touchy
 public class GameState : IGrid {
-	public int GridSizeX { private set; get; }
-	public int GridSizeY { private set; get; }
-	public int score { private set; get; }
+	public int GridSizeX { protected set; get; }
+	public int GridSizeY { protected set; get; }
+	public int score { protected set; get; }
 
-	int[,] grid;
+	protected int[,] grid;
 
 	public virtual void Generate(int GridSizeX, int GridSizeY) {
 		this.GridSizeX = GridSizeX;
