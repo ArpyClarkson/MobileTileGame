@@ -12,10 +12,6 @@ public class GameState : IGrid {
 
 	protected int[,] grid;
 
-	public void CopyGrid(System.Array dest) {
-		System.Buffer.BlockCopy(grid, 0, dest, 0, GridSizeX * GridSizeY * 4);
-	}
-
 	public virtual void Generate(int GridSizeX, int GridSizeY) {
 		this.GridSizeX = GridSizeX;
 		this.GridSizeY = GridSizeY;
