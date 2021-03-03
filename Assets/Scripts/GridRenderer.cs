@@ -8,7 +8,8 @@ using UnityEngine;
  */
 
 public class GridRenderer : MonoBehaviour {
-    GridManager gm;
+
+    GameObject tile;
 
     // Start is called before the first frame update
     void Start() {
@@ -18,5 +19,13 @@ public class GridRenderer : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
+    }
+
+    public void Render( IGrid grid, int sizeX, int sizeY ) {
+        for ( int x = 0; x < sizeX; x++ ) {
+            for ( int y = 0; y < sizeY; y++ ) {
+                Instantiate( tile, new Vector3( x, y ), Quaternion.identity );
+            }
+        }
     }
 }
