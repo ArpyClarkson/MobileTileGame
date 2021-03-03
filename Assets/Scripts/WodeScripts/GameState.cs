@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class GameState : IGrid {
 	public int GridSizeX { protected set; get; }
 	public int GridSizeY { protected set; get; }
-	public int score { protected set; get; }
+	public int Score { protected set; get; }
+	public bool IsGameOver { protected set; get; }
 
 	protected int[,] grid;
 
@@ -13,7 +14,7 @@ public class GameState : IGrid {
 		this.GridSizeX = GridSizeX;
 		this.GridSizeY = GridSizeY;
 
-		score = 0;
+		Score = 0;
 		grid = new int[GridSizeX, GridSizeY];
 
 		for(int x = 0; x < GridSizeX; x++) {
@@ -86,6 +87,11 @@ public class GameState : IGrid {
 		Remove(x, y, g);
 		CollapseVertical();
 		CollapseHorizontal();
+		IsGameOver = CheckGameOver();
+		return true;
+	}
+
+	protected virtual bool CheckGameOver() {
 		return true;
 	}
 
