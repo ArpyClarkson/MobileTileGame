@@ -28,19 +28,26 @@ public class GameState : IGrid {
 		}
 	}
 
-	void Remove(int x, int y, int match) {
+	protected bool IsWithinBounds(int x, int y) => (x > 0) && (x < GridSizeX) && (y > 0) && (y < GridSizeY);
+
+	void Remove(int x, int y, int match, List<Manifest.Position> removals) {
+		if(!IsWithinBounds(x, y))
+			return;
+
 		if(grid[x, y] != match)
 			return;
 
 		grid[x, y] = 0;
-		Remove(x+1, y, match);
-		Remove(x-1, y, match);
-		Remove(x, y+1, match);
-		Remove(x, y-1, match);
+		removals.Add(new Manifest.Position{ x = x, y = y });
+
+		Remove(x+1, y, match, removals);
+		Remove(x-1, y, match, removals);
+		Remove(x, y+1, match, removals);
+		Remove(x, y-1, match, removals);
 	}
 
-	void CollapseVertical() {
-		for(int x = 0; x < GridSizeX; x++) {
+	void CollapseVertical(List<Manifest.Move> moves) {
+		for (int x = 0; x < GridSizeX; x++) {
 			for(int y = 0; y < GridSizeY; y++) {
 				if(grid[x, y] != 0)
 					continue;
@@ -51,13 +58,14 @@ public class GameState : IGrid {
 
 					grid[x, y] = grid[x, y2];
 					grid[x, y2] = 0;
+					moves.Add(new Manifest.Move { start = { x = x, y = y2 }, end = { x = x, y = y } });
 					break;
 				}
 			}
 		}
 	}
 
-	void CollapseHorizontal() {
+	void CollapseHorizontal(List<Manifest.Move> moves) {
 		int midX = GridSizeX/2;
 		for(int x = 0; x < GridSizeX; x++) {
 			bool isColumnEmpty = true;
@@ -77,22 +85,27 @@ public class GameState : IGrid {
 
 			for(int y = 0; y < GridSizeY; y++) {
 				grid[destX, y] = grid[sourceX, y];
+				grid[sourceX, y] = 0;
+				moves.Add(new Manifest.Move{ start = { x = sourceX, y = y }, end = { x = destX, y = y } });
 			}
 		}
 	}
 
-	public virtual bool Pop(int x, int y) {
+	public virtual Manifest Pop(int x, int y) {
 		int g = grid[x, y];
 		
 		//Ensure at least 2 adjacent tiles match
 		if((grid[x+1, y] != g) && (grid[x-1, y] != g) && (grid[x, y+1] != g) && (grid[x, y-1] != g))
-			return false;
+			return null;
 
-		Remove(x, y, g);
-		CollapseVertical();
-		CollapseHorizontal();
+		var manifest = new Manifest();
+
+		Remove(x, y, g, manifest.removals);
+		CollapseVertical(manifest.verticalMoves);
+		CollapseHorizontal(manifest.horizontalMoves);
 		IsGameOver = CheckGameOver();
-		return true;
+
+		return manifest;
 	}
 
 	protected virtual bool CheckGameOver() {

@@ -5,7 +5,7 @@ public interface IGrid {
 	int this[int x, int y] { get; }
 
 	void Generate(int sizeX, int sizeY);
-	bool Pop(int x, int y);
+	Manifest Pop(int x, int y);
 	void Undo();
 	void Redo();
 }
