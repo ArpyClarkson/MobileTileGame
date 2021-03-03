@@ -10,10 +10,11 @@ using UnityEngine;
 public class GridRenderer : MonoBehaviour {
 
     public GameObject tile;
+    List<GameObject> tiles;
 
     // Start is called before the first frame update
     void Start() {
-
+        tiles = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -22,9 +23,13 @@ public class GridRenderer : MonoBehaviour {
     }
 
     public void Render( IGrid grid, int sizeX, int sizeY ) {
+        if ( tiles.Count != 0 )
+            tiles.Clear();
+
         for ( int x = 0; x < sizeX; x++ ) {
             for ( int y = 0; y < sizeY; y++ ) {
-                Instantiate( tile, new Vector3( x, y ), Quaternion.identity );
+                GameObject t = Instantiate( tile, new Vector3( x, y ), Quaternion.identity );
+                tiles.Add( t );
             }
         }
     }
