@@ -18,6 +18,8 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
 
     void Update() {
 
+		grid.CopyGrid(buf);
+
 		if(Input.GetMouseButtonDown(0)) {
 			
 		}
