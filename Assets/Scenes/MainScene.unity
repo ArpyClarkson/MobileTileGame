@@ -280,6 +280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 759586652}
   - component: {fileID: 759586651}
+  - component: {fileID: 759586650}
   - component: {fileID: 759586649}
   - component: {fileID: 759586653}
   - component: {fileID: 759586654}
@@ -312,6 +313,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &759586650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759586648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ef75b8820d44a645b9f63df7970b6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 2745586610968790402, guid: ab5b92d4616e60148aca5c82d6d76698, type: 3}
 --- !u!114 &759586651
 MonoBehaviour:
   m_ObjectHideFlags: 0

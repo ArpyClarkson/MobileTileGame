@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class GridRenderer : MonoBehaviour {
 
-    GameObject tile;
+    public GameObject tile;
 
     // Start is called before the first frame update
     void Start() {
