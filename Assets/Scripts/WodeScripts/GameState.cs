@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 //Dan's implementation no touchy
 public class GameState : IGrid {
@@ -7,8 +8,13 @@ public class GameState : IGrid {
 	public int GridSizeY { protected set; get; }
 	public int Score { protected set; get; }
 	public bool IsGameOver { protected set; get; }
+	public int this[int x, int y] { get => grid[x, y]; }
 
 	protected int[,] grid;
+
+	public void CopyGrid(System.Array dest) {
+		System.Buffer.BlockCopy(grid, 0, dest, 0, GridSizeX * GridSizeY * 4);
+	}
 
 	public virtual void Generate(int GridSizeX, int GridSizeY) {
 		this.GridSizeX = GridSizeX;
@@ -16,10 +22,12 @@ public class GameState : IGrid {
 
 		Score = 0;
 		grid = new int[GridSizeX, GridSizeY];
+		
+		Random.InitState((int)Time.realtimeSinceStartup*0xBEEF);
 
 		for(int x = 0; x < GridSizeX; x++) {
 			for(int y = 0; y < GridSizeY; y++) {
-				grid[x, y] = 0;
+				grid[x, y] = Random.Range(1, 5);
 			}
 		}
 	}
