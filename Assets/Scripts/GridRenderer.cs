@@ -23,8 +23,13 @@ public class GridRenderer : MonoBehaviour {
     }
 
     public void Render( IGrid grid, int sizeX, int sizeY ) {
-        if ( tiles.Count != 0 )
+        if ( tiles.Count != 0 ) {
+            foreach (GameObject t in tiles) {
+                Destroy( t );
+            }
             tiles.Clear();
+        }
+            
 
         for ( int x = 0; x < sizeX; x++ ) {
             for ( int y = 0; y < sizeY; y++ ) {
