@@ -48,11 +48,7 @@ public class TileGrid : GameState {
 
     bool CheckTile( int _x, int _y, int _t ) {
         if ( _x >= 0 && _x < GridSizeX && _y >= 0 && _y < GridSizeY ) {
-            if ( grid[_x, _y] == _t ) {
-                return true;
-            } else {
-                return false;
-            }
+            return grid[_x, _y] == _t;
         } else {
             return false;
         }
