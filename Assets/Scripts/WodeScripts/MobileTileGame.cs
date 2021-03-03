@@ -13,7 +13,7 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
         //grid = new GameState();
 		grid = new TileGrid();
 		grid.Generate(9, 13);
-		buf = new float[9*13];
+		buf = new float[grid.GridSizeX*grid.GridSizeY];
 
 		//var gr = gameObject.GetComponent<GridRenderer>();
 	}

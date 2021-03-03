@@ -31,15 +31,19 @@ Pass {
 
     fixed3 frag(v2f i) : SV_Target {
         float2 GridSize = float2(9,13);
-
         uint2 index = i.uv*GridSize;
         uint value = _grid[index.x + GridSize.x*index.y];
-        
-        if(value == 1) return float3(1,0,0);
-        if(value == 2) return float3(0,1,0);
-        if(value == 3) return float3(0,0,1);
 
-        return 0;
+        float3 result = 0;
+        if(value == 1) result = float3(1,0,0);
+        if(value == 2) result = float3(0,1,0);
+        if(value == 3) result = float3(0,0,1);
+
+        float2 fr = frac(i.uv*GridSize);
+        fr = float2(distance(fr.x, 0.5f), distance(fr.y, 0.5f));
+        float m = 1.f-max(fr.x, fr.y);
+        if(m > 0.52f) return result*m*m*m;
+        return sin(_Time.w + i.uv.x + i.uv.y);
 
         return float4(frac(i.uv*float2(9,13)), 0, 0);
     }
