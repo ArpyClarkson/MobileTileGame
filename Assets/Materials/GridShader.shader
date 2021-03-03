@@ -26,7 +26,21 @@ Pass {
         return o;
     }
 
-    fixed4 frag(v2f i) : SV_Target {
+    uint _grid[1024];
+    
+
+    fixed3 frag(v2f i) : SV_Target {
+        float2 GridSize = float2(9,13);
+
+        uint2 index = i.uv*GridSize;
+        uint value = _grid[index.x + GridSize.x*index.y];
+        
+        if(value == 1) return float3(1,0,0);
+        if(value == 2) return float3(0,1,0);
+        if(value == 3) return float3(0,0,1);
+
+        return 0;
+
         return float4(frac(i.uv*float2(9,13)), 0, 0);
     }
     ENDCG

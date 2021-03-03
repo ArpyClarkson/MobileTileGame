@@ -8,17 +8,25 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
 	float[] buf;
 
 	void Start() {
+		Application.targetFrameRate = 30;
+
         //grid = new GameState();
 		grid = new TileGrid();
 		grid.Generate(9, 13);
 		buf = new float[9*13];
 
-		var gr = gameObject.AddComponent<GridRenderer>();
+		//var gr = gameObject.GetComponent<GridRenderer>();
 	}
 
-    void Update() {
+	void Update() {
 
-		grid.CopyGrid(buf);
+		for (int x = 0; x < grid.GridSizeX; x++) {
+			for (int y = 0; y < grid.GridSizeY; y++) {
+				buf[x + grid.GridSizeX*y] = grid[x, y];
+			}
+		}
+
+		Shader.SetGlobalFloatArray("_grid", buf);
 
 		if(Input.GetMouseButtonDown(0)) {
 			
