@@ -102,7 +102,7 @@ public class GameState : IGrid {
 
 		CollapseVertical(manifest.verticalMoves);
 		CollapseHorizontal(manifest.horizontalMoves);
-		//IsGameOver = CheckGameOver();
+		IsGameOver = CheckGameOver();
 
 		return manifest;
 	}

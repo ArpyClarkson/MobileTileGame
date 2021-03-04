@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class MobileTileGame : MonoBehaviour {
 	IGrid grid;
 	float[] buf;
@@ -18,6 +19,7 @@ public class MobileTileGame : MonoBehaviour {
 		buf = new float[grid.Size.x * grid.Size.y];
 
 		var gridRect = (RectTransform)GameObject.Find("Grid").transform;
+		gridRect.GetComponent<AspectRatioFitter>().aspectRatio = (float)grid.Size.x / grid.Size.y;
 		clickEvent = gridRect.GetComponent<EventTrigger>().triggers.Find(x => x.eventID == EventTriggerType.PointerClick).callback;
 
 		clickEvent.AddListener(data => {
