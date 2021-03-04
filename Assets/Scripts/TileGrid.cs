@@ -19,8 +19,8 @@ public class TileGrid : GameState {
         List<Vector2Int> tiles = new List<Vector2Int>();
         bool gameover = false;
 
-        for ( int x = 0; x < GridSizeX; x++ ) {
-            for ( int y = 0; y < GridSizeY; y++ ) {
+        for ( int x = 0; x < Size.x; x++ ) {
+            for ( int y = 0; y < Size.y; y++ ) {
                 if ( grid[x, y] != 0 ) {
                     tiles.Add( new Vector2Int( x, y ) );
                 }
@@ -49,7 +49,7 @@ public class TileGrid : GameState {
     }
 
     bool CheckTile( int _x, int _y, int _t ) {
-        if ( _x >= 0 && _x < GridSizeX && _y >= 0 && _y < GridSizeY ) {
+        if ( _x >= 0 && _x < Size.x && _y >= 0 && _y < Size.y) {
             return grid[_x, _y] == _t;
         } else {
             return false;

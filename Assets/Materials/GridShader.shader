@@ -34,8 +34,6 @@ Pass {
         uint2 index = abs(i.uv)*gridSize;
         uint value = grid[index.x + gridSize.x*index.y];
 
-        
-
         float3 result = 0;
         if(value == 1) result = float3(1,0,0);
         if(value == 2) result = float3(0,1,0);
@@ -45,7 +43,7 @@ Pass {
         float2 fr = frac(i.uv*gridSize);
         fr = float2(distance(fr.x, 0.5f), distance(fr.y, 0.5f));
         float m = 1.f-max(fr.x, fr.y);
-        if(m > 0.52f/*+ sin((i.uv.x+i.uv.y)*10.0f+_Time.w)*0.08f*/) return result*m*m*m;
+        if(m > 0.52f && value != 0) return result*m*m*m;
 
         i.uv *= 3.14f;
         return float3(

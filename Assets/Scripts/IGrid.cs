@@ -1,7 +1,8 @@
-﻿
+﻿using UnityEngine;
+
 public interface IGrid {
-	int GridSizeX { get; }
-	int GridSizeY { get; }
+	Vector2Int Size { get; }
+	int Score { get; }
 	int this[int x, int y] { get; }
 
 	void Generate(int sizeX, int sizeY);

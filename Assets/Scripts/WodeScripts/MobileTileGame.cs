@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
+public class MobileTileGame : MonoBehaviour {
 	IGrid grid;
 	float[] buf;
+	EventTrigger.TriggerEvent clickEvent;
 
 	void OnEnable() {
 		Application.targetFrameRate = 30;
@@ -14,40 +15,40 @@ public class MobileTileGame : MonoBehaviour, IPointerDownHandler {
         //grid = new GameState();
 		grid = new TileGrid();
 		grid.Generate(9, 13);
-		buf = new float[grid.GridSizeX*grid.GridSizeY];
+		buf = new float[grid.Size.x * grid.Size.y];
 
-		var gridImage = FindObjectOfType<RawImage>();
-		var trigger = gridImage.gameObject.AddComponent<EventTrigger>();
-		EventTrigger.Entry entry = new EventTrigger.Entry();
-		entry.eventID = EventTriggerType.PointerClick;
-		entry.callback.AddListener((data) => {
-			Debug.Log((data as PointerEventData ).position / gridImage.rectTransform.rect.size);
+		var gridRect = (RectTransform)GameObject.Find("Grid").transform;
+		clickEvent = gridRect.GetComponent<EventTrigger>().triggers.Find(x => x.eventID == EventTriggerType.PointerClick).callback;
+
+		clickEvent.AddListener(data => {
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(
+				gridRect, (data as PointerEventData).position, Camera.main, out Vector2 localPosition);
+
+			var uv = (localPosition / gridRect.rect.size) + new Vector2(0.5f, 0.5f);
+			var iTile = new Vector2Int((int)(uv.x * grid.Size.x), (int)(uv.y * grid.Size.y));
+
+			grid.Pop(iTile.x, iTile.y);
+			GameObject.Find("Score").GetComponent<Text>().text = grid.Score.ToString();
+
+			//var gr = gameObject.GetComponent<GridRenderer>();
 		});
-		trigger.triggers.Add(entry);
-
-		//var gr = gameObject.GetComponent<GridRenderer>();
 	}
 
 	void Update() {
 		if(grid == null)
 			return;
 
-		for (int x = 0; x < grid.GridSizeX; x++) {
-			for (int y = 0; y < grid.GridSizeY; y++) {
-				buf[x + grid.GridSizeX*y] = grid[x, y];
+		for (int x = 0; x < grid.Size.x; x++) {
+			for (int y = 0; y < grid.Size.y; y++) {
+				buf[x + grid.Size.x * y] = grid[x, y];
 			}
 		}
 
-		Shader.SetGlobalVector("gridSize", new Vector4(grid.GridSizeX, grid.GridSizeY));
+		Shader.SetGlobalVector("gridSize", new Vector4(grid.Size.x, grid.Size.y));
 		Shader.SetGlobalFloatArray("grid", buf);
 	}
 
 	void OnDisable() {
-
-	}
-
-	public void OnPointerDown(PointerEventData eventData) {
-
-		//Debug.Log(eventData.position);
+		clickEvent.RemoveAllListeners();
 	}
 }

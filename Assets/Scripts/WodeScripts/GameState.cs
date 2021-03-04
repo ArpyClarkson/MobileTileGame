@@ -4,41 +4,36 @@ using UnityEngine;
 
 //Dan's implementation no touchy
 public class GameState : IGrid {
-	public int GridSizeX { protected set; get; }
-	public int GridSizeY { protected set; get; }
+	public Vector2Int Size { protected set; get; }
 	public int Score { protected set; get; }
 	public bool IsGameOver { protected set; get; }
 	public int this[int x, int y] { get => grid[x, y]; }
 
 	protected int[,] grid;
 
-	public virtual void Generate(int GridSizeX, int GridSizeY) {
-		this.GridSizeX = GridSizeX;
-		this.GridSizeY = GridSizeY;
-
+	public virtual void Generate(int sizeX, int sizeY) {
+		Size = new Vector2Int(sizeX, sizeY);
 		Score = 0;
-		grid = new int[GridSizeX, GridSizeY];
-		
-		Random.InitState((int)Time.realtimeSinceStartup*0xBEEF);
+		grid = new int[Size.x, Size.y];
 
-		for(int x = 0; x < GridSizeX; x++) {
-			for(int y = 0; y < GridSizeY; y++) {
+		Random.InitState(System.Environment.TickCount);
+
+		for(int x = 0; x < Size.x; x++) {
+			for(int y = 0; y < Size.y; y++) {
 				grid[x, y] = Random.Range(1, 5);
 			}
 		}
 	}
 
-	protected bool IsWithinBounds(int x, int y) => (x > 0) && (x < GridSizeX) && (y > 0) && (y < GridSizeY);
+	protected bool IsWithinBounds(int x, int y) => (x > -1) && (x < Size.x) && (y > -1) && (y < Size.y);
+	protected bool IsMatching(int x, int y, int m) => IsWithinBounds(x, y) && grid[x, y] == m;
 
-	void Remove(int x, int y, int match, List<Manifest.Position> removals) {
-		if(!IsWithinBounds(x, y))
-			return;
-
-		if(grid[x, y] != match)
+	void Remove(int x, int y, int match, List<Vector2Int> removals) {
+		if(!IsMatching(x, y, match))
 			return;
 
 		grid[x, y] = 0;
-		removals.Add(new Manifest.Position{ x = x, y = y });
+		removals.Add(new Vector2Int(x, y));
 
 		Remove(x+1, y, match, removals);
 		Remove(x-1, y, match, removals);
@@ -47,12 +42,13 @@ public class GameState : IGrid {
 	}
 
 	void CollapseVertical(List<Manifest.Move> moves) {
-		for (int x = 0; x < GridSizeX; x++) {
-			for(int y = 0; y < GridSizeY; y++) {
+		for (int x = 0; x < Size.x; x++) {
+			for(int y = 0; y < Size.y-1; y++) {
 				if(grid[x, y] != 0)
 					continue;
 
-				for(int y2 = y+1; y2 < GridSizeY; y++) {
+				//Empty cell found, look above it for a tile
+				for(int y2 = y+1; y2 < Size.y; y2++) {
 					if(grid[x, y2] == 0)
 						continue;
 
@@ -66,24 +62,25 @@ public class GameState : IGrid {
 	}
 
 	void CollapseHorizontal(List<Manifest.Move> moves) {
-		int midX = GridSizeX/2;
-		for(int x = 0; x < GridSizeX; x++) {
-			bool isColumnEmpty = true;
-			int destX = x <= midX ? midX - x : x;
-			int sourceX = x <= midX ? destX-1 : destX+1;
+		int midX = Size.x / 2;
+		for(int x = 1; x < Size.x-1; x++) {
+			int sourceX = (x < midX ? midX-x-1 : x+1);
+			int dir = (x < midX ? 1 : -1);
 
-			for(int y = 0; y < GridSizeY; y++) {
-				if(grid[destX, y] == 0)
-					continue;
-
-				isColumnEmpty = false;
-				break;
-			}
-
-			if(!isColumnEmpty)
+			//Skip if source column is empty
+			if(grid[sourceX, 0] == 0)
 				continue;
 
-			for(int y = 0; y < GridSizeY; y++) {
+			int destX = sourceX;
+			while(grid[destX + dir, 0] == 0)
+				destX += dir;
+
+			//Skip if we didn't find an empty column
+			if(destX == sourceX)
+				continue;
+
+			//Copy over neighboring outer column, exiting early if we run into an empty
+			for(int y = 0; y < Size.y && grid[sourceX, y] != 0; y++) {
 				grid[destX, y] = grid[sourceX, y];
 				grid[sourceX, y] = 0;
 				moves.Add(new Manifest.Move{ start = { x = sourceX, y = y }, end = { x = destX, y = y } });
@@ -92,18 +89,20 @@ public class GameState : IGrid {
 	}
 
 	public virtual Manifest Pop(int x, int y) {
-		int g = grid[x, y];
-		
-		//Ensure at least 2 adjacent tiles match
-		if((grid[x+1, y] != g) && (grid[x-1, y] != g) && (grid[x, y+1] != g) && (grid[x, y-1] != g))
+		if(!IsWithinBounds(x, y))
+			return null;
+
+		var m = grid[x, y];
+		if(!IsMatching(x+1, y, m) && !IsMatching(x-1, y, m) && !IsMatching(x, y+1, m) && !IsMatching(x, y-1, m))
 			return null;
 
 		var manifest = new Manifest();
+		Remove(x, y, m, manifest.removals);
+		Score += manifest.removals.Count*manifest.removals.Count;
 
-		Remove(x, y, g, manifest.removals);
 		CollapseVertical(manifest.verticalMoves);
 		CollapseHorizontal(manifest.horizontalMoves);
-		IsGameOver = CheckGameOver();
+		//IsGameOver = CheckGameOver();
 
 		return manifest;
 	}
