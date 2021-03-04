@@ -37,6 +37,8 @@ public class TileGrid : GameState {
                 bool y1 = CheckTile( t.x, t.y - 1, tt );
                 bool y2 = CheckTile( t.x, t.y + 1, tt );
 
+                //shorter alternative ^.^
+                //gameover = !(x1 || x2 || y1 || y2);
                 if ( x1 == true || x2 == true || y1 == true || y2 == true )
                     gameover = false;
                 else

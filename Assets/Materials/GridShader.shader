@@ -30,7 +30,7 @@ Pass {
     float2 gridSize;
     
     fixed3 frag(v2f i) : SV_Target {
-        i.uv.y = (i.uv.y+_Time.x*(floor(i.uv.x*gridSize.x) - gridSize.x/2.f))%1.0f;
+        //i.uv.y = (i.uv.y+_Time.x*(floor(i.uv.x*gridSize.x) - gridSize.x/2.f))%1.0f;
         uint2 index = abs(i.uv)*gridSize;
         uint value = grid[index.x + gridSize.x*index.y];
 
@@ -45,7 +45,7 @@ Pass {
         float2 fr = frac(i.uv*gridSize);
         fr = float2(distance(fr.x, 0.5f), distance(fr.y, 0.5f));
         float m = 1.f-max(fr.x, fr.y);
-        if(m > 0.58f+ sin((i.uv.x+i.uv.y)*10.0f+_Time.w)*0.08f) return result*m*m*m;
+        if(m > 0.52f/*+ sin((i.uv.x+i.uv.y)*10.0f+_Time.w)*0.08f*/) return result*m*m*m;
 
         i.uv *= 3.14f;
         return float3(
